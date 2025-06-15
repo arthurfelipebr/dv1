@@ -44,7 +44,6 @@ const SettingsPage: React.FC = () => {
           icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>}
         >
           <p>Conecte o ArchiEng Dashboard com outras ferramentas e serviços, como sistemas bancários, Autentique/DocuSign para assinaturas digitais, ou APIs de terceiros.</p>
-          <p className="text-xs text-neutral-dark italic">Chave API Gemini: {process.env.API_KEY ? `${process.env.API_KEY.substring(0,4)}...${process.env.API_KEY.substring(process.env.API_KEY.length - 4)} (Ambiente)` : 'Não configurada'}</p>
           <button className="mt-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-dark">
             Configurar Integrações
           </button>
