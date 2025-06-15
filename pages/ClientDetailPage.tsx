@@ -151,7 +151,7 @@ const ClientDetailPage: React.FC = () => {
               <label htmlFor="address" className="block text-sm font-medium text-neutral-dark">Endereço</label>
               <input type="text" name="address" id="address" value={formData.address || ''} onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm"/>
             </div>
-             <div>
+            <div>
               <label htmlFor="notes" className="block text-sm font-medium text-neutral-dark">Observações</label>
               <textarea name="notes" id="notes" value={formData.notes || ''} onChange={handleInputChange} rows={3} className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm"></textarea>
             </div>

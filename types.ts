@@ -65,6 +65,7 @@ export interface Inspection {
   status: InspectionStatus;
   photos: Photo[];
   checklist: ChecklistItem[];
+  presetName?: string;
   reportNotes?: string;
   generatedReportSummary?: string; 
   tasks?: Task[];

@@ -44,6 +44,7 @@ export const getClientById = async (id: string): Promise<Client | undefined> => 
   return client ? JSON.parse(JSON.stringify(client)) : undefined;
 };
 
+
 export const createClient = async (newClientData: Omit<Client, 'id'>): Promise<Client> => {
   await new Promise(resolve => setTimeout(resolve, 400));
   const newId = `client-${Date.now()}-${Math.random().toString(16).slice(2)}`;
