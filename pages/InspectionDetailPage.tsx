@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Inspection, InspectionStatus, Photo, ChecklistItem, ChecklistItemStatus, Task, TaskStatus, ExternalReport } from '../types';
 import { getInspectionById, updateInspection, addPhotoToInspection, updateChecklistItemStatus, createTaskForInspection, updateTaskStatusForInspection, addExternalReportToInspection } from '../services/inspectionService';
+import { generateInspectionPdf } from '../services/reportService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import PhotoUpload from '../components/inspections/PhotoUpload';
 import PhotoChecklist from '../components/inspections/PhotoChecklist';
@@ -378,10 +379,9 @@ const InspectionDetailPage: React.FC = () => {
       </div>
       
 
-      {/* Placeholder for PDF generation button */}
       <div className="fixed bottom-6 right-6 z-30">
-        <button 
-          onClick={() => alert('Funcionalidade de Geração de PDF (Puppeteer) a ser implementada no backend.')}
+        <button
+          onClick={() => inspection && generateInspectionPdf(inspection)}
           className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
