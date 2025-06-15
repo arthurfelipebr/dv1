@@ -1,0 +1,301 @@
+export interface InspectionField {
+  id: string;
+  label: string;
+  type: 'text' | 'number' | 'boolean' | 'select';
+  options?: string[];
+}
+
+export interface InspectionSection {
+  id: string;
+  title: string;
+  fields: InspectionField[];
+}
+
+export const COMPLETE_INSPECTION_SECTIONS: InspectionSection[] = [
+  {
+    id: 'dados-vistoria',
+    title: 'Dados da Vistoria',
+    fields: [
+      { id: 'data-vistoria', label: 'Data da Vistoria', type: 'text' },
+      { id: 'local-vistoria', label: 'Local da Vistoria', type: 'text' },
+      { id: 'proponentes', label: 'Proponente(s)', type: 'text' },
+      { id: 'prestadora', label: 'Prestadora', type: 'text' },
+      { id: 'banco', label: 'Banco', type: 'text' },
+      { id: 'produto', label: 'Produto', type: 'text' },
+      {
+        id: 'tipo-inspecao',
+        label: 'Tipo de Inspeção',
+        type: 'select',
+        options: ['Urbano Padrão', 'Rural', 'Outro'],
+      },
+      {
+        id: 'endereco-divergente',
+        label: 'O endereço divergiu do pedido?',
+        type: 'boolean',
+      },
+    ],
+  },
+  {
+    id: 'imovel-avaliado',
+    title: 'Imóvel Avaliado',
+    fields: [
+      {
+        id: 'tipo-imovel',
+        label: 'Tipo do Imóvel Avaliado',
+        type: 'select',
+        options: ['Apartamento', 'Casa', 'Sobrado', 'Sala Comercial', 'Loft', 'Loja', 'Galpão', 'Prédio Comercial', 'Misto', 'Depósito Autônomo', 'Vaga Autônoma', 'Terreno', 'Outro'],
+      },
+      {
+        id: 'tipo-implantacao',
+        label: 'Tipo de Implantação',
+        type: 'select',
+        options: ['Condomínio', 'Isolado'],
+      },
+      {
+        id: 'indicacao-ocupacao',
+        label: 'Indício de Ocupação do Imóvel',
+        type: 'select',
+        options: ['Habitado', 'Desabitado'],
+      },
+      { id: 'idade-aparente', label: 'Idade Aparente do Imóvel (anos)', type: 'number' },
+      { id: 'ano-construcao', label: 'Ano de Construção', type: 'number' },
+      {
+        id: 'estado-conservacao',
+        label: 'Estado de Conservação',
+        type: 'select',
+        options: ['Ruim', 'Regular', 'Bom', 'Em Construção'],
+      },
+      {
+        id: 'padrao-acabamento',
+        label: 'Padrão de Acabamento do Imóvel',
+        type: 'select',
+        options: ['Mínimo', 'Baixo', 'Normal', 'Alto'],
+      },
+      {
+        id: 'uso-imovel',
+        label: 'Uso do Imóvel',
+        type: 'select',
+        options: ['Residencial', 'Comercial', 'Industrial', 'Misto', 'Outro'],
+      },
+      {
+        id: 'fechamento-paredes',
+        label: 'Fechamento das Paredes',
+        type: 'select',
+        options: ['Alvenaria', 'Parede de Gesso (drywall)', 'Madeira', 'Outro'],
+      },
+      { id: 'num-pavimentos', label: 'N\u00ba Pavimentos da Unidade', type: 'number' },
+      { id: 'num-banheiros', label: 'N\u00ba de Banheiros', type: 'number' },
+      { id: 'num-dormitorios', label: 'N\u00ba de Dormit\u00f3rios', type: 'number' },
+      { id: 'num-vagas-cobertas', label: 'N\u00ba de Vagas Cobertas', type: 'number' },
+      { id: 'num-vagas-descobertas', label: 'N\u00ba de Vagas Descobertas', type: 'number' },
+      { id: 'num-vagas-privativas', label: 'N\u00ba de Vagas Privativas', type: 'number' },
+      {
+        id: 'fachada-principal',
+        label: 'Fachada Principal',
+        type: 'select',
+        options: ['Pintura', 'Cer\u00e2mica/Pastilhas', 'Granito/M\u00e1rmore', 'Vidro', 'Pintura Texturizada/P\u00e1tina/Stucco', 'Pintura/P\u00e1tina/Stucco', 'Outro'],
+      },
+      {
+        id: 'esquadrias',
+        label: 'Esquadrias',
+        type: 'select',
+        options: ['Alum\u00ednio', 'Ferro', 'Gesso', 'Madeira', 'Pl\u00e1stico', 'Outro'],
+      },
+      { id: 'area-privativa', label: '\u00c1rea Privativa (em m\u00b2)', type: 'number' },
+      { id: 'area-comum', label: '\u00c1rea Comum (em m\u00b2)', type: 'number' },
+      { id: 'area-total', label: '\u00c1rea Total (em m\u00b2)', type: 'number' },
+      { id: 'area-averbada', label: '\u00c1rea Averbada (em m\u00b2)', type: 'number' },
+      { id: 'area-nao-averbada', label: '\u00c1rea n\u00e3o Averbada (em m\u00b2)', type: 'number' },
+      {
+        id: 'face-imovel',
+        label: 'Face do Im\u00f3vel',
+        type: 'select',
+        options: ['Sul', 'Norte', 'Leste', 'Oeste'],
+      },
+      { id: 'comodos', label: 'C\u00f4modos', type: 'text' },
+    ],
+  },
+  {
+    id: 'condominio',
+    title: 'Condom\u00ednio',
+    fields: [
+      { id: 'num-andares', label: 'N\u00ba Andares/Pavimentos', type: 'number' },
+      { id: 'unidades-por-andar', label: 'Unidades por Andar', type: 'number' },
+      { id: 'num-total-unidades', label: 'N\u00ba Total de Unidades', type: 'number' },
+      { id: 'num-elevadores', label: 'N\u00ba de Elevadores', type: 'number' },
+      { id: 'valor-condominio', label: 'Valor do Condom\u00ednio', type: 'number' },
+      {
+        id: 'pagamento-condominio',
+        label: 'Pagamento do Condom\u00ednio',
+        type: 'select',
+        options: ['Mensal', 'Anual'],
+      },
+      { id: 'descricao-andares', label: 'Descri\u00e7\u00e3o/Identifica\u00e7\u00e3o dos Andares/Pavimentos', type: 'text' },
+      {
+        id: 'uso-edificio',
+        label: 'Uso do Edif\u00edcio',
+        type: 'select',
+        options: ['Residencial', 'Industrial', 'Comercial', 'Misto', 'Outro'],
+      },
+      {
+        id: 'padrao-construcao',
+        label: 'Padr\u00e3o de Constru\u00e7\u00e3o',
+        type: 'select',
+        options: ['Alto', 'Normal-alto', 'Normal', 'Normal-baixo', 'Baixo'],
+      },
+      {
+        id: 'estado-conservacao-cond',
+        label: 'Estado de Conserva\u00e7\u00e3o',
+        type: 'select',
+        options: ['Ruim', 'Regular', 'Bom', 'Em Constru\u00e7\u00e3o'],
+      },
+      { id: 'infraestrutura-condominio', label: 'Infraestrutura', type: 'text' },
+    ],
+  },
+  {
+    id: 'caracterizacao-regiao',
+    title: 'Caracteriza\u00e7\u00e3o da Regi\u00e3o',
+    fields: [
+      {
+        id: 'regiao',
+        label: 'Regi\u00e3o',
+        type: 'select',
+        options: ['Comercial', 'Industrial', 'Residencial Unifamiliar', 'Residencial Multifamiliar', 'Outros'],
+      },
+      { id: 'infraestrutura-urbana', label: 'Infraestrutura Urbana', type: 'text' },
+      {
+        id: 'tipo-pavimentacao',
+        label: 'Tipo de Pavimenta\u00e7\u00e3o',
+        type: 'select',
+        options: ['Asfalto', 'Anti-P\u00f3', 'Paralelepipedo', 'Terra', 'Lajota', 'Cascalho', 'Outro'],
+      },
+      {
+        id: 'restritivos',
+        label: 'Restritivos',
+        type: 'select',
+        options: ['Favela', 'C\u00f3rregos/Rios', 'Risco Ambiental', 'Nenhum', 'Outro'],
+      },
+      { id: 'servicos-publicos', label: 'Servi\u00e7os P\u00fablicos e Comunit\u00e1rios', type: 'text' },
+      {
+        id: 'localizacao',
+        label: 'Localiza\u00e7\u00e3o',
+        type: 'select',
+        options: ['Urbano', 'Suburbano', 'Im\u00f3vel Rural', 'Favela'],
+      },
+      {
+        id: 'valor-imoveis-regiao',
+        label: 'Valor dos Im\u00f3veis da Regi\u00e3o',
+        type: 'select',
+        options: ['Crescente', 'Est\u00e1vel', 'Decrescente'],
+      },
+      {
+        id: 'area-urbanizada',
+        label: '\u00c1rea Urbanizada',
+        type: 'select',
+        options: ['Menos 25%', '25% - 75%', 'Mais de 75%'],
+      },
+      {
+        id: 'tendencia-uso-terreno',
+        label: 'Tend\u00eancia de uso do terreno',
+        type: 'select',
+        options: ['Comercial', 'Industrial', 'Residencial'],
+      },
+      {
+        id: 'situacao-bairro',
+        label: 'Situa\u00e7\u00e3o do Bairro',
+        type: 'select',
+        options: ['Antigo', 'Novo', 'Em Desenvolvimento', 'Em Mudan\u00e7a de Ocupa\u00e7\u00e3o'],
+      },
+      { id: 'limites-bairro', label: 'Limites do Bairro', type: 'text' },
+      {
+        id: 'padrao-construtivo-regiao',
+        label: 'Padr\u00e3o construtivo predominante na Regi\u00e3o',
+        type: 'select',
+        options: ['Baixo', 'Normal-baixo', 'Normal', 'Normal-alto', 'Alto'],
+      },
+      {
+        id: 'fatores-valorizantes',
+        label: 'Fatores Valorizantes',
+        type: 'select',
+        options: ['Vista Mar', 'Vista Parque', 'Vista Permanente', 'Metr\u00f4', 'Nenhum', 'Outro'],
+      },
+    ],
+  },
+  {
+    id: 'terreno',
+    title: 'Terreno',
+    fields: [
+      {
+        id: 'topografia',
+        label: 'Topografia',
+        type: 'select',
+        options: ['Plana/Semi-Plana', 'Desn\u00edvel Pronunciado (Acidentado)', 'Aclive (> 10%)', 'Declive (< 10%)'],
+      },
+      {
+        id: 'formato',
+        label: 'Formato',
+        type: 'select',
+        options: ['Regular (Geom\u00e9trico)', 'Irregular'],
+      },
+      { id: 'area-terreno', label: '\u00c1rea (em m\u00b2)', type: 'number' },
+      { id: 'testada', label: 'Testada/Frente (em metros)', type: 'number' },
+      { id: 'fundos', label: 'Fundos (em metros)', type: 'number' },
+      { id: 'lado-direito', label: 'Lado Direito (em metros)', type: 'number' },
+      { id: 'lado-esquerdo', label: 'Lado Esquerdo (em metros)', type: 'number' },
+      { id: 'fracao-ideal', label: 'Fra\u00e7\u00e3o ideal (em %)', type: 'number' },
+    ],
+  },
+  {
+    id: 'manifestacoes-garantia',
+    title: 'Manifesta\u00e7\u00f5es sobre a Garantia',
+    fields: [
+      { id: 'aceite-garantia', label: 'O im\u00f3vel pode ser aceito como garantia?', type: 'boolean' },
+      { id: 'obs-aceite-garantia', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'fornecido-documentos', label: 'Foram fornecidos matr\u00edcula e IPTU?', type: 'boolean' },
+      { id: 'obs-documentos', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'areas-conferem-matricula', label: '\u00c1reas da matr\u00edcula conferem com o local?', type: 'boolean' },
+      { id: 'obs-areas-matricula', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'areas-conferem-iptu', label: '\u00c1reas do IPTU conferem com o local?', type: 'boolean' },
+      { id: 'obs-areas-iptu', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'possui-garagem', label: 'O im\u00f3vel possui vaga de garagem?', type: 'boolean' },
+      { id: 'vagas-documentadas', label: 'Se possui vagas, elas est\u00e3o documentadas?', type: 'boolean' },
+      { id: 'obs-garagem', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'imovel-concluido', label: 'O im\u00f3vel est\u00e1 conclu\u00eddo, sem sinais de reforma ou obras?', type: 'boolean' },
+      { id: 'obs-concluido', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'bem-conservado', label: 'O im\u00f3vel est\u00e1 bem conservado?', type: 'boolean' },
+      { id: 'obs-conservacao', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'area-urbana', label: 'O im\u00f3vel est\u00e1 em \u00e1rea urbana com melhoramentos?', type: 'boolean' },
+      { id: 'obs-area-urbana', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'concreto-alvenaria', label: 'Constru\u00eddo em concreto e alvenaria?', type: 'boolean' },
+      { id: 'obs-concreto-alvenaria', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'caracteristica-unifamiliar', label: 'Possui caracter\u00edsticas uni-familiares?', type: 'boolean' },
+      { id: 'obs-unifamiliar', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'uso-unico', label: 'O im\u00f3vel tem um \u00fanico uso?', type: 'boolean' },
+      { id: 'obs-uso-unico', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'boa-garantia', label: 'Constitui boa garantia e tem liquidez?', type: 'boolean' },
+      { id: 'obs-boa-garantia', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'habitabilidade', label: 'Apresenta condi\u00e7\u00f5es de habitabilidade?', type: 'boolean' },
+      { id: 'obs-habitabilidade', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'area-risco', label: 'N\u00e3o est\u00e1 localizado em \u00e1rea de risco?', type: 'boolean' },
+      { id: 'obs-area-risco', label: 'Observa\u00e7\u00f5es', type: 'text' },
+      { id: 'contaminacao', label: 'Possui suspeita de contamina\u00e7\u00e3o?', type: 'boolean' },
+      { id: 'obs-contaminacao', label: 'Observa\u00e7\u00f5es', type: 'text' },
+    ],
+  },
+  {
+    id: 'conclusao',
+    title: 'Conclus\u00e3o',
+    fields: [
+      {
+        id: 'tipo-acompanhante',
+        label: 'Tipo do Acompanhante',
+        type: 'select',
+        options: ['Corretor', 'Propriet\u00e1rio / Construtora', 'Proponente / Comprador / Garantidor / Mutu\u00e1rio', 'Respons\u00e1vel Construtora', 'Engenheiro da Obra', 'Zelador', 'Outros'],
+      },
+      { id: 'nome-acompanhante', label: 'Nome Acompanhante Vistoria', type: 'text' },
+      { id: 'contato-acompanhante', label: 'Contato Telef\u00f4nico Acompanhante', type: 'text' },
+      { id: 'observacoes-finais', label: 'Observa\u00e7\u00f5es Finais', type: 'text' },
+    ],
+  },
+  // Outras seções e campos podem ser adicionados aqui conforme o modelo completo
+];
