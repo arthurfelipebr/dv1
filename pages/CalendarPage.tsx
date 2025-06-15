@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Inspection } from '../types';
 import { getInspections } from '../services/inspectionService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
@@ -82,13 +83,13 @@ const CalendarPage: React.FC = () => {
         <h1 className="text-3xl font-semibold text-neutral-dark">Agenda de Vistorias</h1>
         <div className="flex items-center space-x-2">
           <button onClick={() => changeMonth(-1)} className="p-2 rounded-md hover:bg-neutral-light">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-neutral-dark"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+            <ChevronLeft className="w-5 h-5 text-neutral-dark" />
           </button>
           <h2 className="text-xl font-medium text-neutral-dark w-48 text-center">
             {currentMonth.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
           </h2>
           <button onClick={() => changeMonth(1)} className="p-2 rounded-md hover:bg-neutral-light">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-neutral-dark"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            <ChevronRight className="w-5 h-5 text-neutral-dark" />
           </button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { ClipboardList, CheckCircle, Clock, Users } from 'lucide-react';
 import StatCard from '../components/dashboard/StatCard';
 import { Inspection, InspectionStatus, Task, TaskStatus, Client } from '../types';
 import { getInspections } from '../services/inspectionService';
@@ -78,28 +79,28 @@ const DashboardPage: React.FC = () => {
       <h1 className="text-3xl font-semibold text-neutral-dark">Dashboard</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          title="Total de Vistorias" 
+        <StatCard
+          title="Total de Vistorias"
           value={totalInspections}
-          icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" /></svg>}
+          icon={<ClipboardList className="w-6 h-6" />}
           colorClass="bg-blue-500"
         />
-        <StatCard 
-          title="Vistorias Concluídas" 
+        <StatCard
+          title="Vistorias Concluídas"
           value={completedInspections}
-          icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          icon={<CheckCircle className="w-6 h-6" />}
           colorClass="bg-green-500"
         />
-        <StatCard 
-          title="Vistorias Pendentes" 
+        <StatCard
+          title="Vistorias Pendentes"
           value={pendingInspectionsCount}
-          icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          icon={<Clock className="w-6 h-6" />}
           colorClass="bg-yellow-500"
         />
-        <StatCard 
-          title="Total de Clientes" 
+        <StatCard
+          title="Total de Clientes"
           value={totalClients}
-          icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-3.741-5.602m0 6.082a9.094 9.094 0 013.741-.479m0 0a4.5 4.5 0 01-1.548-8.72m-17.556 0a4.5 4.5 0 011.548-8.72m15.908 0A18.36 18.36 0 0118 18.72m0 0V21" /></svg>}
+          icon={<Users className="w-6 h-6" />}
           colorClass="bg-purple-500"
         />
       </div>
