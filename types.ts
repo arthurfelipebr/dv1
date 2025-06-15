@@ -55,6 +55,62 @@ export interface ExternalReport {
   uploadedAt: Date;
 }
 
+export interface SLAEvent {
+  id: string;
+  name: string;
+  deadline?: Date;
+  status: string;
+  completedAt?: Date;
+}
+
+export interface ScheduleEntry {
+  id: string;
+  date: Date;
+  time: string;
+  note?: string;
+  createdBy: string;
+  createdAt: Date;
+}
+
+export interface Attachment {
+  id: string;
+  name: string;
+  description?: string;
+  url: string;
+  size: number;
+  type: string;
+  uploadedAt: Date;
+  uploadedBy: string;
+}
+
+export interface Expense {
+  id: string;
+  description: string;
+  amount: number;
+  receiptUrl?: string;
+}
+
+export interface PendingItem {
+  id: string;
+  description: string;
+  status: string;
+  dueDate?: Date;
+}
+
+export interface Publication {
+  id: string;
+  author: string;
+  message: string;
+  createdAt: Date;
+}
+
+export interface LocationHistoryItem {
+  id: string;
+  date: Date;
+  user: string;
+  address: string;
+}
+
 export interface Inspection {
   id: string;
   address: string;
@@ -70,6 +126,13 @@ export interface Inspection {
   generatedReportSummary?: string; 
   tasks?: Task[];
   externalReports?: ExternalReport[];
+  slaEvents?: SLAEvent[];
+  schedules?: ScheduleEntry[];
+  attachments?: Attachment[];
+  expenses?: Expense[];
+  pendingItems?: PendingItem[];
+  publications?: Publication[];
+  locationHistory?: LocationHistoryItem[];
 }
 
 export type ClientType = 'BANK' | 'CONSTRUCTION_COMPANY' | 'INDIVIDUAL' | 'OTHER';
