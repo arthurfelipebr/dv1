@@ -6,6 +6,7 @@ import InspectionsListPage from './pages/InspectionsListPage';
 import InspectionDetailPage from './pages/InspectionDetailPage';
 import NewInspectionPage from './pages/NewInspectionPage';
 import ReportsPage from './pages/ReportsPage';
+import InspectionReportFormPage from './pages/InspectionReportFormPage';
 import ClientsPage from './pages/ClientsPage';
 import NewClientPage from './pages/NewClientPage'; // New Page for creating clients
 import ClientDetailPage from './pages/ClientDetailPage'; // New Page for client details
@@ -25,6 +26,7 @@ const App: React.FC = () => {
           
           <Route path={ROUTES.INSPECTIONS} element={<InspectionsListPage />} />
           <Route path={ROUTES.INSPECTION_DETAIL} element={<InspectionDetailPage />} />
+          <Route path={ROUTES.INSPECTION_REPORT_FORM} element={<InspectionReportFormPage />} />
           <Route path={ROUTES.NEW_INSPECTION} element={<NewInspectionPage />} />
           
           <Route path={ROUTES.CLIENTS} element={<ClientsPage />} />

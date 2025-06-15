@@ -12,6 +12,7 @@ export const ROUTES = {
   DASHBOARD: "/dashboard",
   INSPECTIONS: "/inspections",
   INSPECTION_DETAIL: "/inspections/:id",
+  INSPECTION_REPORT_FORM: "/inspections/:id/report",
   NEW_INSPECTION: "/inspections/new",
   REPORTS: "/reports",
   CLIENTS: "/clients",

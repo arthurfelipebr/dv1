@@ -383,13 +383,22 @@ const InspectionDetailPage: React.FC = () => {
       
 
       <div className="fixed bottom-6 right-6 z-30">
-        <button
-          onClick={() => inspection && generateInspectionPdf(inspection)}
-          className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center"
-        >
-          <FileText className="w-5 h-5 mr-2" />
-          Gerar Laudo PDF
-        </button>
+        <div className="space-y-2 flex flex-col items-end">
+          <button
+            onClick={() => inspection && navigate(ROUTES.INSPECTION_REPORT_FORM.replace(':id', inspection.id))}
+            className="bg-secondary hover:bg-secondary-dark text-white font-bold py-2 px-4 rounded-full shadow flex items-center"
+          >
+            <FileText className="w-4 h-4 mr-2" />
+            Preencher Laudo
+          </button>
+          <button
+            onClick={() => inspection && generateInspectionPdf(inspection)}
+            className="bg-primary hover:bg-primary-dark text-white font-bold py-3 px-6 rounded-full shadow-lg flex items-center"
+          >
+            <FileText className="w-5 h-5 mr-2" />
+            Gerar Laudo PDF
+          </button>
+        </div>
       </div>
 
     </div>
