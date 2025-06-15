@@ -9,7 +9,7 @@ export const APP_NAME = "ArchiEng Dashboard";
 // Using process.env.API_KEY directly as per guidelines.
 
 export const ROUTES = {
-  DASHBOARD: "/",
+  DASHBOARD: "/dashboard",
   INSPECTIONS: "/inspections",
   INSPECTION_DETAIL: "/inspections/:id",
   NEW_INSPECTION: "/inspections/new",
