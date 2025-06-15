@@ -8,6 +8,7 @@ import { generateInspectionPdf } from '../services/reportService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import PhotoUpload from '../components/inspections/PhotoUpload';
 import PhotoChecklist from '../components/inspections/PhotoChecklist';
+import MapPreview from '../components/maps/MapPreview';
 import { ROUTES } from '../constants';
 import Modal from '../components/ui/Modal';
 
@@ -217,6 +218,7 @@ const InspectionDetailPage: React.FC = () => {
           <p><strong className="text-neutral-dark">Agendada para:</strong> {new Date(inspection.scheduledDate).toLocaleString('pt-BR')}</p>
           <p><strong className="text-neutral-dark">Vistoriador:</strong> {inspection.inspectorName || 'Não atribuído'}</p>
         </div>
+        <MapPreview address={inspection.address} />
 
         <div className="mt-4">
           <label htmlFor="status" className="block text-sm font-medium text-neutral-dark">Alterar Status:</label>
