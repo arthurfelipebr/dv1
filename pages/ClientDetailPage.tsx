@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Client, ClientType, Inspection, InspectionStatus } from '../types';
+import { Client, ClientType, Inspection, InspectionStatus, ChecklistItemStatus } from '../types';
 import { getClientById, updateClient } from '../services/clientService';
 import { getInspections } from '../services/inspectionService'; // To list client's inspections
 import LoadingSpinner from '../components/ui/LoadingSpinner';
@@ -15,6 +15,7 @@ const ClientDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Partial<Client>>({});
+  const [checklistText, setChecklistText] = useState('');
 
   const fetchClientData = useCallback(async () => {
     if (!id) {
@@ -29,6 +30,11 @@ const ClientDetailPage: React.FC = () => {
       if (clientData) {
         setClient(clientData);
         setFormData(clientData); // Initialize form data for editing
+        if (clientData.checklistTemplate) {
+          setChecklistText(clientData.checklistTemplate.map(item => item.name).join('\n'));
+        } else {
+          setChecklistText('');
+        }
         // Fetch inspections for this client
         const allInspections = await getInspections();
         setInspections(allInspections.filter(insp => insp.clientName === clientData.name));
@@ -66,6 +72,16 @@ const ClientDetailPage: React.FC = () => {
     try {
       // Ensure we don't pass the 'id' in the updatable payload itself if service expects Omit<Client, 'id'>
       const { id: clientId, ...updatePayload } = formData;
+      if (checklistText.trim().length > 0) {
+        const items = checklistText.split('\n').map((name, idx) => ({
+          id: `tmpl-${idx}`,
+          name: name.trim(),
+          status: ChecklistItemStatus.PENDING,
+        }));
+        (updatePayload as any).checklistTemplate = items;
+      } else {
+        (updatePayload as any).checklistTemplate = undefined;
+      }
       const updatedClient = await updateClient(id, updatePayload as Omit<Client, 'id'>);
       if (updatedClient) {
         setClient(updatedClient);
@@ -151,9 +167,13 @@ const ClientDetailPage: React.FC = () => {
               <label htmlFor="address" className="block text-sm font-medium text-neutral-dark">Endereço</label>
               <input type="text" name="address" id="address" value={formData.address || ''} onChange={handleInputChange} className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm"/>
             </div>
-             <div>
+            <div>
               <label htmlFor="notes" className="block text-sm font-medium text-neutral-dark">Observações</label>
               <textarea name="notes" id="notes" value={formData.notes || ''} onChange={handleInputChange} rows={3} className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm"></textarea>
+            </div>
+            <div>
+              <label htmlFor="checklist" className="block text-sm font-medium text-neutral-dark">Checklist Padrão (um item por linha)</label>
+              <textarea id="checklist" name="checklist" value={checklistText} onChange={(e) => setChecklistText(e.target.value)} rows={4} className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm" placeholder="Item A\nItem B" />
             </div>
             <div className="flex justify-end space-x-3 pt-4">
               <button type="button" onClick={() => {setIsEditing(false); setError(null);}} className="px-4 py-2 border border-neutral rounded-md text-sm font-medium text-neutral-dark hover:bg-neutral-light">Cancelar</button>
@@ -169,6 +189,16 @@ const ClientDetailPage: React.FC = () => {
             <p><strong className="text-neutral-dark">Telefone:</strong> {client.contactPhone || 'N/A'}</p>
             <p className="md:col-span-2"><strong className="text-neutral-dark">Endereço:</strong> {client.address || 'N/A'}</p>
             {client.notes && <p className="md:col-span-2"><strong className="text-neutral-dark">Observações:</strong> <span className="whitespace-pre-wrap">{client.notes}</span></p>}
+            {client.checklistTemplate && client.checklistTemplate.length > 0 && (
+              <div className="md:col-span-2">
+                <strong className="text-neutral-dark">Checklist Padrão:</strong>
+                <ul className="list-disc list-inside text-neutral-dark">
+                  {client.checklistTemplate.map(item => (
+                    <li key={item.id}>{item.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         )}
       </div>

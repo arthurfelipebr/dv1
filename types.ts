@@ -82,6 +82,7 @@ export interface Client {
   address?: string; // Added address for clients
   cnpjCpf?: string; // Added CNPJ/CPF
   notes?: string; // Added notes
+  checklistTemplate?: ChecklistItem[]; // Custom default checklist for this client
 }
 
 export interface ComparableProperty {

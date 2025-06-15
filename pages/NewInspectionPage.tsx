@@ -1,8 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Inspection, InspectionStatus } from '../types'; // Assuming InspectionStatus is defined for initial status
+import { Inspection, InspectionStatus, Client } from '../types'; // Assuming InspectionStatus is defined for initial status
 import { createInspection } from '../services/inspectionService';
+import { getClients } from '../services/clientService';
 import { ROUTES } from '../constants';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 
@@ -15,6 +16,22 @@ const NewInspectionPage: React.FC = () => {
   const [reportNotes, setReportNotes] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [clientsLoading, setClientsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const data = await getClients();
+        setClients(data);
+      } catch (err) {
+        console.error('Failed to load clients', err);
+      } finally {
+        setClientsLoading(false);
+      }
+    };
+    fetchClients();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,16 +103,23 @@ const NewInspectionPage: React.FC = () => {
           <label htmlFor="clientName" className="block text-sm font-medium text-neutral-dark">
             Nome do Cliente/Empresa *
           </label>
-          <input
-            type="text"
-            name="clientName"
-            id="clientName"
-            value={clientName}
-            onChange={(e) => setClientName(e.target.value)}
-            required
-            placeholder="Ex: Banco X, Construtora Y, João da Silva"
-            className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
-          />
+          {clientsLoading ? (
+            <p className="text-sm text-neutral">Carregando clientes...</p>
+          ) : (
+            <select
+              name="clientName"
+              id="clientName"
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+            >
+              <option value="">Selecione um cliente</option>
+              {clients.map(c => (
+                <option key={c.id} value={c.name}>{c.name}</option>
+              ))}
+            </select>
+          )}
         </div>
 
         <div>
