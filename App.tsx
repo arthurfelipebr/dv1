@@ -9,6 +9,7 @@ import ReportsPage from './pages/ReportsPage';
 import ClientsPage from './pages/ClientsPage';
 import NewClientPage from './pages/NewClientPage'; // New Page for creating clients
 import ClientDetailPage from './pages/ClientDetailPage'; // New Page for client details
+import ComparablesPage from './pages/ComparablesPage';
 import CalendarPage from './pages/CalendarPage';
 import SettingsPage from './pages/SettingsPage';
 import { ROUTES } from './constants';
@@ -31,6 +32,7 @@ const App: React.FC = () => {
 
           <Route path={ROUTES.CALENDAR} element={<CalendarPage />} />
           <Route path={ROUTES.REPORTS} element={<ReportsPage />} />
+          <Route path={ROUTES.COMPARABLES} element={<ComparablesPage />} />
           <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
           
           <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />

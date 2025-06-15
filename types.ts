@@ -84,6 +84,16 @@ export interface Client {
   notes?: string; // Added notes
 }
 
+export interface ComparableProperty {
+  id: string;
+  address: string;
+  region: string;
+  propertyType: string;
+  appraisalDate: Date;
+  appraisedValue: number;
+  notes?: string;
+}
+
 // For Gemini Search Grounding
 export interface GroundingChunkWeb {
   uri: string;
