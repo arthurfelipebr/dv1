@@ -23,6 +23,13 @@ let inspections: Inspection[] = [
         { id: 'task-1-2', inspectionId: '1', description: 'Preparar equipamento fotográfico.', status: TaskStatus.PENDENTE, createdAt: new Date('2024-08-11T10:00:00Z') }
     ],
     externalReports: [],
+    slaEvents: [],
+    schedules: [],
+    attachments: [],
+    expenses: [],
+    pendingItems: [],
+    publications: [],
+    locationHistory: [],
   },
   {
     id: '2',
@@ -49,7 +56,14 @@ let inspections: Inspection[] = [
     ],
     externalReports: [
         { id: 'er-2-1', name: 'Laudo_SISDEA_Ref123.pdf', type: 'SISDEA', uploadedAt: new Date('2024-08-21T10:00:00Z'), url: '#' }
-    ]
+    ],
+    slaEvents: [],
+    schedules: [],
+    attachments: [],
+    expenses: [],
+    pendingItems: [],
+    publications: [],
+    locationHistory: [],
   },
   {
     id: '3',
@@ -71,6 +85,13 @@ let inspections: Inspection[] = [
       { id: 'task-3-2', inspectionId: '3', description: 'Solicitar plantas originais.', status: TaskStatus.PENDENTE, createdAt: new Date() }
     ],
     externalReports: [],
+    slaEvents: [],
+    schedules: [],
+    attachments: [],
+    expenses: [],
+    pendingItems: [],
+    publications: [],
+    locationHistory: [],
   },
 ];
 
@@ -110,6 +131,13 @@ export const createInspection = async (newInspectionData: Omit<Inspection, 'id' 
     presetName: newInspectionData.presetName,
     tasks: [], // Initialize with empty tasks array
     externalReports: [], // Initialize with empty external reports array
+    slaEvents: [],
+    schedules: [],
+    attachments: [],
+    expenses: [],
+    pendingItems: [],
+    publications: [],
+    locationHistory: [],
   };
   inspections.push(inspection);
   return JSON.parse(JSON.stringify(inspection)); // Return deep copy
@@ -121,12 +149,19 @@ export const updateInspection = async (id: string, updatedData: Partial<Inspecti
   if (index !== -1) {
     // Ensure tasks and externalReports are not overwritten if not provided in updatedData
     const currentInspection = inspections[index];
-    inspections[index] = { 
-        ...currentInspection, 
+    inspections[index] = {
+        ...currentInspection,
         ...updatedData,
         tasks: updatedData.tasks !== undefined ? updatedData.tasks : currentInspection.tasks,
-        externalReports: updatedData.externalReports !== undefined ? updatedData.externalReports : currentInspection.externalReports 
-     }; // Removed trailing comma here
+        externalReports: updatedData.externalReports !== undefined ? updatedData.externalReports : currentInspection.externalReports,
+        slaEvents: updatedData.slaEvents !== undefined ? updatedData.slaEvents : currentInspection.slaEvents,
+        schedules: updatedData.schedules !== undefined ? updatedData.schedules : currentInspection.schedules,
+        attachments: updatedData.attachments !== undefined ? updatedData.attachments : currentInspection.attachments,
+        expenses: updatedData.expenses !== undefined ? updatedData.expenses : currentInspection.expenses,
+        pendingItems: updatedData.pendingItems !== undefined ? updatedData.pendingItems : currentInspection.pendingItems,
+        publications: updatedData.publications !== undefined ? updatedData.publications : currentInspection.publications,
+        locationHistory: updatedData.locationHistory !== undefined ? updatedData.locationHistory : currentInspection.locationHistory
+     };
     return JSON.parse(JSON.stringify(inspections[index])); // Return deep copy
   }
   return undefined;

@@ -30,6 +30,20 @@ const InspectionDetailPage: React.FC = () => {
   const [externalReportType, setExternalReportType] = useState<'SISDEA' | 'OUTRO'>('OUTRO');
   const [isAddingExternalReport, setIsAddingExternalReport] = useState(false);
 
+  const tabList = [
+    { id: 'detalhes', label: 'Detalhamento' },
+    { id: 'localizacao', label: 'Localização' },
+    { id: 'sla', label: 'SLA' },
+    { id: 'agendamentos', label: 'Agendamentos' },
+    { id: 'anexos', label: 'Anexos' },
+    { id: 'laudos', label: 'Laudos' },
+    { id: 'despesas', label: 'Despesas' },
+    { id: 'pendencias', label: 'Pendências' },
+    { id: 'publicacoes', label: 'Publicações' },
+  ] as const;
+  type TabId = typeof tabList[number]['id'];
+  const [activeTab, setActiveTab] = useState<TabId>('detalhes');
+
 
   const fetchInspection = useCallback(async () => {
     if (!id) {
@@ -380,7 +394,121 @@ const InspectionDetailPage: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex border-b border-neutral-light mb-4">
+          {tabList.map(t => (
+            <button
+              key={t.id}
+              onClick={() => setActiveTab(t.id)}
+              className={`mr-3 pb-2 text-sm font-medium ${activeTab === t.id ? 'border-b-2 border-primary text-primary-dark' : 'text-neutral-dark hover:text-primary-dark'}`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <div className="text-sm space-y-2">
+          {activeTab === 'detalhes' && (
+            <div>
+              <p><strong>ID:</strong> {inspection.id}</p>
+              <p><strong>Cliente:</strong> {inspection.clientName}</p>
+              <p><strong>Tipo:</strong> {inspection.propertyType}</p>
+            </div>
+          )}
+          {activeTab === 'localizacao' && (
+            <div>
+              <p>{inspection.address}</p>
+              {inspection.locationHistory && inspection.locationHistory.length > 0 && (
+                <ul className="list-disc pl-4 mt-2">
+                  {inspection.locationHistory.map(h => (
+                    <li key={h.id}>{new Date(h.date).toLocaleDateString('pt-BR')} - {h.address} ({h.user})</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+          {activeTab === 'sla' && (
+            <div>
+              {inspection.slaEvents && inspection.slaEvents.length > 0 ? (
+                <ul className="space-y-1">
+                  {inspection.slaEvents.map(ev => (
+                    <li key={ev.id} className="flex justify-between">
+                      <span>{ev.name}</span>
+                      <span>{ev.status}{ev.completedAt ? ` - ${new Date(ev.completedAt).toLocaleDateString('pt-BR')}` : ''}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : <p>Nenhum evento registrado.</p>}
+            </div>
+          )}
+          {activeTab === 'agendamentos' && (
+            <div>
+              {inspection.schedules && inspection.schedules.length > 0 ? (
+                <ul className="space-y-1">
+                  {inspection.schedules.map(sch => (
+                    <li key={sch.id}>{new Date(sch.date).toLocaleDateString('pt-BR')} {sch.time} - {sch.note || ''} ({sch.createdBy})</li>
+                  ))}
+                </ul>
+              ) : <p>Nenhum agendamento.</p>}
+            </div>
+          )}
+          {activeTab === 'anexos' && (
+            <div>
+              {inspection.attachments && inspection.attachments.length > 0 ? (
+                <ul className="space-y-1">
+                  {inspection.attachments.map(att => (
+                    <li key={att.id}>{att.name} - {att.type} ({(att.size/1024).toFixed(1)} KB)</li>
+                  ))}
+                </ul>
+              ) : <p>Nenhum anexo.</p>}
+            </div>
+          )}
+          {activeTab === 'laudos' && (
+            <div>
+              {inspection.externalReports && inspection.externalReports.length > 0 ? (
+                <ul className="space-y-1">
+                  {inspection.externalReports.map(rep => (
+                    <li key={rep.id}>{rep.name}</li>
+                  ))}
+                </ul>
+              ) : <p>Nenhum laudo gerado.</p>}
+            </div>
+          )}
+          {activeTab === 'despesas' && (
+            <div>
+              {inspection.expenses && inspection.expenses.length > 0 ? (
+                <ul className="space-y-1">
+                  {inspection.expenses.map(exp => (
+                    <li key={exp.id}>{exp.description}: R$ {exp.amount.toFixed(2)}</li>
+                  ))}
+                </ul>
+              ) : <p>Nenhuma despesa cadastrada.</p>}
+            </div>
+          )}
+          {activeTab === 'pendencias' && (
+            <div>
+              {inspection.pendingItems && inspection.pendingItems.length > 0 ? (
+                <ul className="space-y-1">
+                  {inspection.pendingItems.map(p => (
+                    <li key={p.id}>{p.description} - {p.status}</li>
+                  ))}
+                </ul>
+              ) : <p>Sem pendências.</p>}
+            </div>
+          )}
+          {activeTab === 'publicacoes' && (
+            <div>
+              {inspection.publications && inspection.publications.length > 0 ? (
+                <ul className="space-y-1">
+                  {inspection.publications.map(pub => (
+                    <li key={pub.id}>{new Date(pub.createdAt).toLocaleDateString('pt-BR')} - {pub.author}: {pub.message}</li>
+                  ))}
+                </ul>
+              ) : <p>Nenhuma publicação.</p>}
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="fixed bottom-6 right-6 z-30">
         <div className="space-y-2 flex flex-col items-end">
