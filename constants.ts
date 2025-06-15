@@ -19,6 +19,7 @@ export const ROUTES = {
   CLIENT_DETAIL: "/clients/:id",
   CALENDAR: "/calendar",
   SETTINGS: "/settings",
+  COMPARABLES: "/comparables",
 };
 
 // Ensure these items fully conform to the ChecklistItem interface structure now
