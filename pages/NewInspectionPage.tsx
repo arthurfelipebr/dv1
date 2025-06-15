@@ -11,7 +11,7 @@ const NewInspectionPage: React.FC = () => {
   const navigate = useNavigate();
   const [address, setAddress] = useState('');
   const [propertyType, setPropertyType] = useState('');
-  const [clientName, setClientName] = useState('');
+  const [clientId, setClientId] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
   const [reportNotes, setReportNotes] = useState('');
   const [presetId, setPresetId] = useState('default');
@@ -39,16 +39,17 @@ const NewInspectionPage: React.FC = () => {
     setError(null);
     setIsLoading(true);
 
-    if (!address || !propertyType || !clientName || !scheduledDate) {
+    if (!address || !propertyType || !clientId || !scheduledDate) {
       setError("Por favor, preencha todos os campos obrigatórios: Endereço, Tipo de Imóvel, Cliente e Data Agendada.");
       setIsLoading(false);
       return;
     }
 
+    const selectedClient = clients.find(c => c.id === clientId);
     const newInspectionData: Omit<Inspection, 'id' | 'photos' | 'checklist' | 'status' | 'tasks' | 'externalReports'> & { presetName: string } = {
       address,
       propertyType,
-      clientName,
+      clientName: selectedClient ? selectedClient.name : '',
       scheduledDate: new Date(scheduledDate),
       reportNotes,
       presetName: presetId,
@@ -120,23 +121,23 @@ const NewInspectionPage: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="clientName" className="block text-sm font-medium text-neutral-dark">
+          <label htmlFor="clientId" className="block text-sm font-medium text-neutral-dark">
             Nome do Cliente/Empresa *
           </label>
           {clientsLoading ? (
             <p className="text-sm text-neutral">Carregando clientes...</p>
           ) : (
             <select
-              name="clientName"
-              id="clientName"
-              value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
+              name="clientId"
+              id="clientId"
+              value={clientId}
+              onChange={(e) => setClientId(e.target.value)}
               required
               className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
             >
               <option value="">Selecione um cliente</option>
               {clients.map(c => (
-                <option key={c.id} value={c.name}>{c.name}</option>
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           )}
