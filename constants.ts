@@ -38,3 +38,21 @@ export const DEFAULT_CHECKLIST_ITEMS: ChecklistItem[] = [
   { id: 'default-10', name: "Danos Visíveis (Interno)", description: "Fotos de quaisquer danos internos (rachaduras, infiltrações).", required: false, status: ChecklistItemStatus.PENDING },
   { id: 'default-11', name: "Danos Visíveis (Externo)", description: "Fotos de quaisquer danos externos (pintura, telhado).", required: false, status: ChecklistItemStatus.PENDING },
 ];
+
+export const SIMPLIFIED_CHECKLIST_ITEMS: ChecklistItem[] = [
+  { id: 'simp-0', name: 'Fachada Principal', required: true, status: ChecklistItemStatus.PENDING },
+  { id: 'simp-1', name: 'Sala de Estar', required: true, status: ChecklistItemStatus.PENDING },
+  { id: 'simp-2', name: 'Cozinha', required: true, status: ChecklistItemStatus.PENDING },
+];
+
+export const COMPLETE_CHECKLIST_ITEMS: ChecklistItem[] = [
+  ...DEFAULT_CHECKLIST_ITEMS,
+  { id: 'comp-12', name: 'Área Externa', required: false, status: ChecklistItemStatus.PENDING },
+  { id: 'comp-13', name: 'Telhado', required: false, status: ChecklistItemStatus.PENDING },
+];
+
+export const CHECKLIST_PRESETS = {
+  default: { name: 'Padrão', items: DEFAULT_CHECKLIST_ITEMS },
+  simplified: { name: 'Simplificado', items: SIMPLIFIED_CHECKLIST_ITEMS },
+  complete: { name: 'Completo', items: COMPLETE_CHECKLIST_ITEMS },
+} as const;

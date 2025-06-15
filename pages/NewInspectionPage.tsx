@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Inspection, InspectionStatus, Client } from '../types'; // Assuming InspectionStatus is defined for initial status
 import { createInspection } from '../services/inspectionService';
 import { getClients } from '../services/clientService';
-import { ROUTES } from '../constants';
+import { ROUTES, CHECKLIST_PRESETS } from '../constants';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const NewInspectionPage: React.FC = () => {
@@ -14,6 +14,7 @@ const NewInspectionPage: React.FC = () => {
   const [clientName, setClientName] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
   const [reportNotes, setReportNotes] = useState('');
+  const [presetId, setPresetId] = useState('default');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [clients, setClients] = useState<Client[]>([]);
@@ -44,12 +45,13 @@ const NewInspectionPage: React.FC = () => {
       return;
     }
 
-    const newInspectionData: Omit<Inspection, 'id' | 'photos' | 'checklist' | 'status'> = {
+    const newInspectionData: Omit<Inspection, 'id' | 'photos' | 'checklist' | 'status' | 'tasks' | 'externalReports'> & { presetName: string } = {
       address,
       propertyType,
       clientName,
       scheduledDate: new Date(scheduledDate),
       reportNotes,
+      presetName: presetId,
       // inspectorName will be assigned later or based on user
     };
 
@@ -82,6 +84,24 @@ const NewInspectionPage: React.FC = () => {
             className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
           />
         </div>
+
+        <div>
+          <label htmlFor="preset" className="block text-sm font-medium text-neutral-dark">
+            Modelo de Checklist
+          </label>
+          <select
+            name="preset"
+            id="preset"
+            value={presetId}
+            onChange={(e) => setPresetId(e.target.value)}
+            className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
+          >
+            {Object.entries(CHECKLIST_PRESETS).map(([id, preset]) => (
+              <option key={id} value={id}>{preset.name}</option>
+            ))}
+          </select>
+        </div>
+
 
         <div>
           <label htmlFor="propertyType" className="block text-sm font-medium text-neutral-dark">

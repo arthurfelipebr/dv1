@@ -1,5 +1,4 @@
 import { Client, ClientType } from '../types';
-import { DEFAULT_CHECKLIST_ITEMS } from '../constants';
 
 let clients: Client[] = [
   {
@@ -10,8 +9,7 @@ let clients: Client[] = [
     contactPhone: '(61) 3206-9999',
     address: 'SBS Quadra 4 LT 3/4, Edifício Matriz I, Brasília - DF',
     cnpjCpf: '00.360.305/0001-04',
-    notes: 'Cliente de longa data, prioridade alta para vistorias de financiamento.',
-    checklistTemplate: DEFAULT_CHECKLIST_ITEMS
+    notes: 'Cliente de longa data, prioridade alta para vistorias de financiamento.'
   },
   {
     id: 'client-2',
@@ -46,11 +44,6 @@ export const getClientById = async (id: string): Promise<Client | undefined> => 
   return client ? JSON.parse(JSON.stringify(client)) : undefined;
 };
 
-export const getClientByName = async (name: string): Promise<Client | undefined> => {
-  await new Promise(resolve => setTimeout(resolve, 200));
-  const client = clients.find(c => c.name === name);
-  return client ? JSON.parse(JSON.stringify(client)) : undefined;
-};
 
 export const createClient = async (newClientData: Omit<Client, 'id'>): Promise<Client> => {
   await new Promise(resolve => setTimeout(resolve, 400));

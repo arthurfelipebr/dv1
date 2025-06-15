@@ -1,6 +1,5 @@
 import { Inspection, InspectionStatus, ChecklistItem, ChecklistItemStatus, Photo, Task, TaskStatus, ExternalReport } from '../types';
-import { DEFAULT_CHECKLIST_ITEMS } from '../constants';
-import { getClientByName } from './clientService';
+import { DEFAULT_CHECKLIST_ITEMS, CHECKLIST_PRESETS } from '../constants';
 
 // Mock database
 let inspections: Inspection[] = [
@@ -86,13 +85,15 @@ export const getInspectionById = async (id: string): Promise<Inspection | undefi
   return inspection ? JSON.parse(JSON.stringify(inspection)) : undefined; // Return deep copy
 };
 
-export const createInspection = async (newInspectionData: Omit<Inspection, 'id' | 'photos' | 'checklist' | 'status' | 'tasks' | 'externalReports'>): Promise<Inspection> => {
+export const createInspection = async (newInspectionData: Omit<Inspection, 'id' | 'photos' | 'checklist' | 'status' | 'tasks' | 'externalReports'> & { presetName?: string }): Promise<Inspection> => {
   await new Promise(resolve => setTimeout(resolve, 500));
   const newId = (Math.max(0, ...inspections.map(i => parseInt(i.id))) + 1).toString();
   let template = DEFAULT_CHECKLIST_ITEMS;
-  const client = await getClientByName(newInspectionData.clientName);
-  if (client && client.checklistTemplate && client.checklistTemplate.length > 0) {
-    template = client.checklistTemplate;
+  if (newInspectionData.presetName) {
+    const preset = (CHECKLIST_PRESETS as Record<string, { name: string; items: ChecklistItem[] }>)[newInspectionData.presetName];
+    if (preset) {
+      template = preset.items;
+    }
   }
   const newChecklist: ChecklistItem[] = template.map((item, index) => ({
     ...JSON.parse(JSON.stringify(item)), // Deep copy
@@ -106,6 +107,7 @@ export const createInspection = async (newInspectionData: Omit<Inspection, 'id' 
     photos: [],
     checklist: newChecklist,
     status: InspectionStatus.REQUESTED,
+    presetName: newInspectionData.presetName,
     tasks: [], // Initialize with empty tasks array
     externalReports: [], // Initialize with empty external reports array
   };
