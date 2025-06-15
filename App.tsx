@@ -12,6 +12,7 @@ import ClientDetailPage from './pages/ClientDetailPage'; // New Page for client 
 import ComparablesPage from './pages/ComparablesPage';
 import CalendarPage from './pages/CalendarPage';
 import SettingsPage from './pages/SettingsPage';
+import SuperAdminPage from './pages/SuperAdminPage';
 import { ROUTES } from './constants';
 
 const App: React.FC = () => {
@@ -34,7 +35,8 @@ const App: React.FC = () => {
           <Route path={ROUTES.REPORTS} element={<ReportsPage />} />
           <Route path={ROUTES.COMPARABLES} element={<ComparablesPage />} />
           <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
-          
+          <Route path={ROUTES.SUPER_ADMIN} element={<SuperAdminPage />} />
+
           <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         </Route>
       </Routes>

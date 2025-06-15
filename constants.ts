@@ -20,6 +20,7 @@ export const ROUTES = {
   CALENDAR: "/calendar",
   SETTINGS: "/settings",
   COMPARABLES: "/comparables",
+  SUPER_ADMIN: "/super-admin",
 };
 
 // Ensure these items fully conform to the ChecklistItem interface structure now
