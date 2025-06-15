@@ -84,6 +84,12 @@ const Sidebar: React.FC = () => {
           currentPath={location.pathname}
           icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-3.741-5.602m0 6.082a9.094 9.094 0 013.741-.479m0 0a4.5 4.5 0 01-1.548-8.72m-17.556 0a4.5 4.5 0 011.548-8.72m15.908 0A18.36 18.36 0 0118 18.72m0 0V21" /></svg>}
         />
+        <NavItem
+          to={ROUTES.SUPER_ADMIN}
+          label="Super Admin"
+          currentPath={location.pathname}
+          icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h18M3 7h18M6 11h12M10 15h4M12 19h0" /></svg>}
+        />
       </nav>
       <div className="p-4 mt-auto border-t border-neutral-light">
         <NavItem 
