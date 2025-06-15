@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/shared/Layout';
 import DashboardPage from './pages/DashboardPage';
 import InspectionsListPage from './pages/InspectionsListPage';
@@ -15,7 +15,7 @@ import { ROUTES } from './constants';
 
 const App: React.FC = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to={ROUTES.DASHBOARD} replace />} />
@@ -36,7 +36,7 @@ const App: React.FC = () => {
           <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         </Route>
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 
