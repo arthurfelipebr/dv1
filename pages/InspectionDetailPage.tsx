@@ -1,9 +1,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Inspection, InspectionStatus, Photo, ChecklistItem, ChecklistItemStatus, GroundingChunk, GroundingMetadata, Task, TaskStatus, ExternalReport } from '../types';
+import { Inspection, InspectionStatus, Photo, ChecklistItem, ChecklistItemStatus, Task, TaskStatus, ExternalReport } from '../types';
 import { getInspectionById, updateInspection, addPhotoToInspection, updateChecklistItemStatus, createTaskForInspection, updateTaskStatusForInspection, addExternalReportToInspection } from '../services/inspectionService';
-import { generateInspectionSummary, suggestPhotoCaption, getInformationWithGoogleSearch } from '../services/geminiService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import PhotoUpload from '../components/inspections/PhotoUpload';
 import PhotoChecklist from '../components/inspections/PhotoChecklist';
@@ -17,17 +16,7 @@ const InspectionDetailPage: React.FC = () => {
   const [inspection, setInspection] = useState<Inspection | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [showPhotoModal, setShowPhotoModal] = useState(false); // Kept for potential future use, but not actively used by current PhotoUpload.
-  const [photoToCaption, setPhotoToCaption] = useState<Photo | null>(null);
-  const [suggestedCaption, setSuggestedCaption] = useState('');
-  const [isSuggestingCaption, setIsSuggestingCaption] = useState(false);
-
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<{text: string, groundingMetadata?: GroundingMetadata } | null>(null);
-  const [isSearching, setIsSearching] = useState(false);
 
   // Task state
   const [newTaskDescription, setNewTaskDescription] = useState('');
@@ -79,20 +68,6 @@ const InspectionDetailPage: React.FC = () => {
     }
   };
 
-  const handleGenerateSummary = async () => {
-    if (!inspection) return;
-    setIsGeneratingSummary(true);
-    try {
-      const summary = await generateInspectionSummary(inspection);
-      const updated = await updateInspection(inspection.id, { generatedReportSummary: summary });
-      if (updated) setInspection(updated);
-    } catch (err) {
-      console.error("Failed to generate summary:", err);
-      setError("Falha ao gerar resumo com IA.");
-    } finally {
-      setIsGeneratingSummary(false);
-    }
-  };
   
   const handleNotesChange = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!inspection) return;
@@ -133,51 +108,6 @@ const InspectionDetailPage: React.FC = () => {
     }
   };
 
-  const openCaptionModal = async (photo: Photo) => {
-    setPhotoToCaption(photo);
-    setSuggestedCaption(''); // Clear previous
-    setIsSuggestingCaption(true);
-    try {
-      const caption = await suggestPhotoCaption(photo.name || "imagem de vistoria", inspection?.propertyType || "imóvel");
-      setSuggestedCaption(caption);
-    } catch (e) {
-      console.error("Failed to suggest caption", e);
-      setSuggestedCaption("Não foi possível sugerir uma legenda.");
-    } finally {
-      setIsSuggestingCaption(false);
-    }
-  };
-
-  const applySuggestedCaption = async () => {
-    if (!inspection || !photoToCaption || !suggestedCaption) return;
-    
-    const updatedPhotos = inspection.photos.map(p => 
-      p.id === photoToCaption.id ? { ...p, caption: suggestedCaption } : p
-    );
-    try {
-      const updated = await updateInspection(inspection.id, { photos: updatedPhotos });
-      if (updated) setInspection(updated);
-      setPhotoToCaption(null); // Close modal
-    } catch (err) {
-      console.error("Failed to update caption:", err);
-      setError("Falha ao atualizar legenda.");
-    }
-  };
-
-  const handleSearchWithGoogle = async () => {
-    if (!searchQuery.trim()) return;
-    setIsSearching(true);
-    setSearchResults(null);
-    try {
-      const results = await getInformationWithGoogleSearch(searchQuery);
-      setSearchResults(results);
-    } catch (e) {
-      console.error("Error during Google Search:", e);
-      setSearchResults({ text: "Erro ao realizar a busca." });
-    } finally {
-      setIsSearching(false);
-    }
-  };
 
   const handleAddTask = async () => {
     if (!inspection || !newTaskDescription.trim()) return;
@@ -326,15 +256,6 @@ const InspectionDetailPage: React.FC = () => {
                     <div key={photo.id} className="relative group">
                       <img src={photo.url} alt={photo.caption || photo.name} className="w-full h-32 object-cover rounded-md shadow border" />
                       {photo.caption && <p className="text-xs text-neutral-dark italic mt-1 truncate" title={photo.caption}>{photo.caption}</p>}
-                      <button 
-                        onClick={() => openCaptionModal(photo)}
-                        className="absolute top-1 right-1 bg-blue-500 text-white rounded-full p-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                        title="Sugerir Legenda (IA)"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                         <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 13.75l-1.25-1.75L14 12l1.25-1.75L17 8.5l1.25 1.75L20.25 12z" />
-                        </svg>
-                      </button>
                     </div>
                   ))}
                 </div>
@@ -404,64 +325,7 @@ const InspectionDetailPage: React.FC = () => {
             />
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-neutral-dark mb-3">Assistente IA para Laudo</h3>
-            <button
-              onClick={handleGenerateSummary}
-              disabled={isGeneratingSummary}
-              className="w-full mb-3 flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-secondary hover:bg-secondary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary disabled:bg-neutral"
-            >
-              {isGeneratingSummary ? <LoadingSpinner size="sm" color="text-white"/> : 'Gerar Resumo do Laudo (IA)'}
-            </button>
-            {inspection.generatedReportSummary && (
-              <div className="mt-3 p-3 bg-neutral-light rounded">
-                <h4 className="font-semibold text-sm text-neutral-dark">Resumo Sugerido:</h4>
-                <p className="text-sm text-neutral-dark whitespace-pre-wrap">{inspection.generatedReportSummary}</p>
-              </div>
-            )}
-          </div>
           
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-neutral-dark mb-3">Pesquisa Google Assistida por IA</h3>
-            <div className="flex space-x-2">
-                <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Ex: norma ABNT para vistorias"
-                    className="flex-grow p-2 border border-neutral-light rounded-md focus:ring-primary focus:border-primary"
-                />
-                <button
-                    onClick={handleSearchWithGoogle}
-                    disabled={isSearching || !searchQuery.trim()}
-                    className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark disabled:bg-neutral"
-                >
-                    {isSearching ? <LoadingSpinner size="sm" color="text-white"/> : "Buscar"}
-                </button>
-            </div>
-            {searchResults && (
-                <div className="mt-4 p-3 bg-neutral-light rounded">
-                    <h4 className="font-semibold text-sm text-neutral-dark">Resultado da Busca:</h4>
-                    <p className="text-sm text-neutral-dark whitespace-pre-wrap">{searchResults.text}</p>
-                    {searchResults.groundingMetadata?.groundingChunks && searchResults.groundingMetadata.groundingChunks.length > 0 && (
-                        <div className="mt-2">
-                            <h5 className="font-semibold text-xs text-neutral-dark">Fontes:</h5>
-                            <ul className="list-disc list-inside text-xs">
-                                {searchResults.groundingMetadata.groundingChunks.map((chunk, index) =>
-                                  chunk.web && (
-                                    <li key={index}>
-                                        <a href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                                            {chunk.web.title || chunk.web.uri}
-                                        </a>
-                                    </li>
-                                  )
-                                )}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            )}
-          </div>
            {/* External Reports Section (e.g., SISDEA) */}
            <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold text-neutral-dark mb-3">Laudos Externos (Ex: SISDEA)</h3>
@@ -513,46 +377,6 @@ const InspectionDetailPage: React.FC = () => {
         </div>
       </div>
       
-      {photoToCaption && (
-        <Modal 
-            isOpen={!!photoToCaption} 
-            onClose={() => setPhotoToCaption(null)}
-            title={`Sugerir Legenda para: ${photoToCaption.name}`}
-        >
-            <div className="space-y-4">
-                <img src={photoToCaption.url} alt={photoToCaption.name} className="max-h-60 w-auto mx-auto rounded-md shadow"/>
-                {isSuggestingCaption && <LoadingSpinner />}
-                {!isSuggestingCaption && suggestedCaption && (
-                    <div>
-                        <label htmlFor="suggestedCaption" className="block text-sm font-medium text-neutral-dark">Legenda Sugerida pela IA:</label>
-                        <textarea
-                            id="suggestedCaption"
-                            value={suggestedCaption}
-                            onChange={(e) => setSuggestedCaption(e.target.value)}
-                            rows={3}
-                            className="w-full mt-1 p-2 border border-neutral-light rounded-md focus:ring-primary focus:border-primary"
-                        />
-                    </div>
-                )}
-                {!isSuggestingCaption && !suggestedCaption && <p>Não foi possível gerar uma sugestão.</p>}
-                 <div className="flex justify-end space-x-2 pt-4">
-                    <button 
-                        onClick={() => setPhotoToCaption(null)}
-                        className="px-4 py-2 border border-neutral rounded-md text-sm font-medium text-neutral-dark hover:bg-neutral-light"
-                    >
-                        Cancelar
-                    </button>
-                    <button 
-                        onClick={applySuggestedCaption} 
-                        disabled={isSuggestingCaption || !suggestedCaption}
-                        className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark disabled:bg-neutral"
-                    >
-                        Aplicar Legenda
-                    </button>
-                </div>
-            </div>
-        </Modal>
-      )}
 
       {/* Placeholder for PDF generation button */}
       <div className="fixed bottom-6 right-6 z-30">
