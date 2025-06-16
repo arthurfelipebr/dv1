@@ -21,6 +21,7 @@ export const ROUTES = {
   CALENDAR: "/calendar",
   SETTINGS: "/settings",
   COMPARABLES: "/comparables",
+  COST_SIMULATOR: "/custo-deslocamento",
   SUPER_ADMIN: "/super-admin",
 };
 
@@ -59,4 +60,4 @@ export const CHECKLIST_PRESETS = {
 } as const;
 
 // Endereço base utilizado para cálculos de deslocamento
-export const COMPANY_BASE_ADDRESS = 'Praça da Sé, São Paulo - SP';
+export const COMPANY_BASE_ADDRESS = 'Rua Dionisio Erthal 69, Santa Rosa, Niterói RJ';
