@@ -186,6 +186,7 @@ export interface FuelCostOptions {
   fuelEfficiencyKmPerLiter: number;
   tolls?: number;
   origin?: string;
+  roundTrip?: boolean;
 }
 
 export interface FuelCostResult {

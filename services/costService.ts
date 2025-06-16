@@ -5,8 +5,9 @@ export interface FuelCostOptions {
   destination: string;
   fuelPricePerLiter: number; // Cost of fuel per liter (BRL)
   fuelEfficiencyKmPerLiter: number; // Vehicle efficiency
-  tolls?: number; // Total toll cost in BRL
-  origin?: string; // optional override of origin address
+  tolls?: number; // Optional manual override for toll cost
+  origin?: string; // Optional override of origin address
+  roundTrip?: boolean; // Whether to consider round-trip distance
 }
 
 export interface FuelCostResult {
@@ -66,22 +67,57 @@ const getDrivingDistanceKm = async (from: Coordinates, to: Coordinates): Promise
   }
 };
 
+const fetchTollCost = async (from: Coordinates, to: Coordinates): Promise<number> => {
+  const apiKey = process.env.TOLLGURU_API_KEY;
+  if (!apiKey) return 0;
+
+  try {
+    const body = {
+      from: { lat: from.lat, lng: from.lon },
+      to: { lat: to.lat, lng: to.lon },
+      vehicleType: '2AxlesAuto'
+    };
+
+    const res = await fetch('https://api.tollguru.com/v1/calc/route', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey
+      },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error('Toll API failed');
+    const data = await res.json();
+    return data.route?.costs?.tag || data.route?.costs?.cash || 0;
+  } catch (err) {
+    console.error('Failed to fetch toll cost:', err);
+    return 0;
+  }
+};
+
 export const calculateFuelCost = async (options: FuelCostOptions): Promise<FuelCostResult> => {
   const originAddress = options.origin || COMPANY_BASE_ADDRESS;
-  const tolls = options.tolls ?? 0;
 
   try {
     const [originCoords, destCoords] = await Promise.all([
       geocodeAddress(originAddress),
       geocodeAddress(options.destination)
     ]);
-    const distanceKm = await getDrivingDistanceKm(originCoords, destCoords);
+    const distanceOneWayKm = await getDrivingDistanceKm(originCoords, destCoords);
+    const distanceKm = distanceOneWayKm * (options.roundTrip === false ? 1 : 2);
+
     const fuelLiters = distanceKm / options.fuelEfficiencyKmPerLiter;
     const fuelCost = fuelLiters * options.fuelPricePerLiter;
-    const totalCost = fuelCost + tolls;
-    return { distanceKm, fuelLiters, fuelCost, tollCost: tolls, totalCost };
+
+    let tollCost = options.tolls ?? 0;
+    if (options.tolls === undefined) {
+      tollCost = (await fetchTollCost(originCoords, destCoords)) * (options.roundTrip === false ? 1 : 2);
+    }
+
+    const totalCost = fuelCost + tollCost;
+    return { distanceKm, fuelLiters, fuelCost, tollCost, totalCost };
   } catch (e) {
     console.error('Failed to calculate fuel cost:', e);
-    return { distanceKm: 0, fuelLiters: 0, fuelCost: 0, tollCost: tolls, totalCost: tolls };
+    return { distanceKm: 0, fuelLiters: 0, fuelCost: 0, tollCost: 0, totalCost: 0 };
   }
 };
