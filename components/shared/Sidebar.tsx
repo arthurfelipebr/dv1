@@ -10,6 +10,7 @@ import {
   FileText,
   ListPlus,
   Users,
+  Car,
   List,
   Settings as SettingsIcon,
 } from 'lucide-react';
@@ -86,6 +87,12 @@ const Sidebar: React.FC = () => {
           label="CDC"
           currentPath={location.pathname}
           icon={<ListPlus className="w-5 h-5" />}
+        />
+        <NavItem
+          to={ROUTES.COST_SIMULATOR}
+          label="Deslocamento"
+          currentPath={location.pathname}
+          icon={<Car className="w-5 h-5" />}
         />
         <NavItem
           to={ROUTES.CLIENTS}

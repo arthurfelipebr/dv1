@@ -23,6 +23,10 @@ O arquivo `services/costService.ts` possui utilidades para estimar o gasto de co
 
 O resultado inclui distância, litros necessários e o custo total da viagem.
 
+### Página de Simulação
+
+Use a rota `/custo-deslocamento` para abrir a página de simulação de custo de deslocamento. Ela permite calcular o valor aproximado partindo de `COMPANY_BASE_ADDRESS` (atualmente "Rua Dionisio Erthal 69, Santa Rosa, Niterói RJ") até qualquer destino.
+
 ## Complete Inspection Template
 
 The file `inspectionTemplate.ts` lists all sections and fields used in the
