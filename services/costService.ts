@@ -1,4 +1,5 @@
-import { COMPANY_BASE_ADDRESS } from '../constants';
+import { COMPANY_BASE_ADDRESS, COMPANY_BASE_COORDS } from '../constants';
+import { Coordinates } from '../types';
 
 export interface FuelCostOptions {
   destination: string;
@@ -16,26 +17,53 @@ export interface FuelCostResult {
   totalCost: number;
 }
 
-type Coordinates = { lat: number; lon: number };
+const knownAddresses: Record<string, Coordinates> = {
+  [COMPANY_BASE_ADDRESS.toLowerCase()]: COMPANY_BASE_COORDS,
+};
+
+const haversineDistanceKm = (from: Coordinates, to: Coordinates): number => {
+  const R = 6371; // Earth radius in km
+  const dLat = ((to.lat - from.lat) * Math.PI) / 180;
+  const dLon = ((to.lon - from.lon) * Math.PI) / 180;
+  const lat1 = (from.lat * Math.PI) / 180;
+  const lat2 = (to.lat * Math.PI) / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
 
 const geocodeAddress = async (address: string): Promise<Coordinates> => {
+  const key = address.trim().toLowerCase();
+  if (knownAddresses[key]) return knownAddresses[key];
+
   const params = new URLSearchParams({ q: address, format: 'json', limit: '1' });
-  const res = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`, {
-    headers: { 'User-Agent': 'ArchiEng Dashboard' }
-  });
-  if (!res.ok) throw new Error('Geocoding failed');
-  const data = await res.json();
-  if (!Array.isArray(data) || data.length === 0) throw new Error('Address not found');
-  return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`, {
+      headers: { 'User-Agent': 'ArchiEng Dashboard' }
+    });
+    if (!res.ok) throw new Error('Geocoding failed');
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) throw new Error('Address not found');
+    return { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+  } catch (err) {
+    console.error('Geocoding error:', err);
+    throw err;
+  }
 };
 
 const getDrivingDistanceKm = async (from: Coordinates, to: Coordinates): Promise<number> => {
   const url = `https://router.project-osrm.org/route/v1/driving/${from.lon},${from.lat};${to.lon},${to.lat}?overview=false`;
-  const res = await fetch(url, { headers: { 'User-Agent': 'ArchiEng Dashboard' } });
-  if (!res.ok) throw new Error('Routing failed');
-  const data = await res.json();
-  if (!data.routes || !data.routes[0]) throw new Error('Route not found');
-  return data.routes[0].distance / 1000; // meters to km
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': 'ArchiEng Dashboard' } });
+    if (!res.ok) throw new Error('Routing failed');
+    const data = await res.json();
+    if (!data.routes || !data.routes[0]) throw new Error('Route not found');
+    return data.routes[0].distance / 1000; // meters to km
+  } catch (err) {
+    console.warn('Routing API failed, using straight-line distance');
+    return haversineDistanceKm(from, to);
+  }
 };
 
 export const calculateFuelCost = async (options: FuelCostOptions): Promise<FuelCostResult> => {
