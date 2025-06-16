@@ -106,6 +106,12 @@ const Sidebar: React.FC = () => {
           currentPath={location.pathname}
           icon={<List className="w-5 h-5" />}
         />
+        <NavItem
+          to={ROUTES.ADMIN_PANEL}
+          label="Admin Panel"
+          currentPath={location.pathname}
+          icon={<LayoutGrid className="w-5 h-5" />}
+        />
       </nav>
       <div className="p-4 mt-auto border-t border-neutral-light">
         <NavItem
