@@ -61,3 +61,5 @@ export const CHECKLIST_PRESETS = {
 
 // Endereço base utilizado para cálculos de deslocamento
 export const COMPANY_BASE_ADDRESS = 'Rua Dionisio Erthal 69, Santa Rosa, Niterói RJ';
+// Approximate coordinates for the base address used when offline
+export const COMPANY_BASE_COORDS = { lat: -22.8991, lon: -43.0957 } as const;

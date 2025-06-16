@@ -13,6 +13,12 @@ export enum ChecklistItemStatus {
   SKIPPED = 'Ignorada',
 }
 
+// Basic latitude/longitude pair used in services like cost simulation
+export interface Coordinates {
+  lat: number;
+  lon: number;
+}
+
 export interface Photo {
   id: string;
   url: string; // Could be a base64 string for local preview or a remote URL
