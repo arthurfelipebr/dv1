@@ -23,6 +23,7 @@ export const ROUTES = {
   COMPARABLES: "/comparables",
   COST_SIMULATOR: "/custo-deslocamento",
   SUPER_ADMIN: "/super-admin",
+  ADMIN_PANEL: "/admin",
 };
 
 // Ensure these items fully conform to the ChecklistItem interface structure now

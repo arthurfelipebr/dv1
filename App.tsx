@@ -15,6 +15,7 @@ import CalendarPage from './pages/CalendarPage';
 import SettingsPage from './pages/SettingsPage';
 import SuperAdminPage from './pages/SuperAdminPage';
 import CostSimulatorPage from './pages/CostSimulatorPage';
+import AdminPanelPage from './pages/AdminPanelPage';
 import { ROUTES } from './constants';
 
 const App: React.FC = () => {
@@ -40,6 +41,7 @@ const App: React.FC = () => {
           <Route path={ROUTES.COST_SIMULATOR} element={<CostSimulatorPage />} />
           <Route path={ROUTES.SETTINGS} element={<SettingsPage />} />
           <Route path={ROUTES.SUPER_ADMIN} element={<SuperAdminPage />} />
+          <Route path={ROUTES.ADMIN_PANEL} element={<AdminPanelPage />} />
 
           <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
         </Route>
