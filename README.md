@@ -12,6 +12,17 @@ This contains everything you need to run your app locally.
 2. Run the app:
    `npm run dev`
 
+## Cálculo de Custo de Combustível
+
+O arquivo `services/costService.ts` possui utilidades para estimar o gasto de combustível até um determinado endereço. O cálculo usa o serviço público do OpenStreetMap para geocodificação e rota, considerando:
+
+- Endereço de origem definido em `COMPANY_BASE_ADDRESS` em `constants.ts`;
+- Preço do litro de combustível;
+- Consumo médio do veículo (km por litro);
+- Valor total de pedágios (opcional).
+
+O resultado inclui distância, litros necessários e o custo total da viagem.
+
 ## Complete Inspection Template
 
 The file `inspectionTemplate.ts` lists all sections and fields used in the

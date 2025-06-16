@@ -173,3 +173,19 @@ export interface GroundingMetadata {
   groundingChunks?: GroundingChunk[];
   // Other grounding metadata fields
 }
+
+export interface FuelCostOptions {
+  destination: string;
+  fuelPricePerLiter: number;
+  fuelEfficiencyKmPerLiter: number;
+  tolls?: number;
+  origin?: string;
+}
+
+export interface FuelCostResult {
+  distanceKm: number;
+  fuelLiters: number;
+  fuelCost: number;
+  tollCost: number;
+  totalCost: number;
+}

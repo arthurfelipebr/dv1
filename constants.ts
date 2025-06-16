@@ -57,3 +57,6 @@ export const CHECKLIST_PRESETS = {
   simplified: { name: 'Simplificado', items: SIMPLIFIED_CHECKLIST_ITEMS },
   complete: { name: 'Completo', items: COMPLETE_CHECKLIST_ITEMS },
 } as const;
+
+// Endereço base utilizado para cálculos de deslocamento
+export const COMPANY_BASE_ADDRESS = 'Praça da Sé, São Paulo - SP';
