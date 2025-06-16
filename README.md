@@ -25,7 +25,7 @@ O resultado inclui distância, litros necessários e o custo total da viagem.
 
 ### Página de Simulação
 
-Use a rota `/custo-deslocamento` para abrir a página de simulação de custo de deslocamento. Ela permite calcular o valor aproximado partindo de `COMPANY_BASE_ADDRESS` (atualmente "Rua Dionisio Erthal 69, Santa Rosa, Niterói RJ") até qualquer destino.
+Use a rota `/custo-deslocamento` para abrir a página de simulação de custo de deslocamento. A calculadora agora considera automaticamente **ida e volta**. Se o campo de pedágio ficar em branco, o valor será buscado na API da TollGuru (é necessário definir `TOLLGURU_API_KEY` no ambiente). O cálculo parte do endereço definido em `COMPANY_BASE_ADDRESS` (atualmente "Rua Dionisio Erthal 69, Santa Rosa, Niterói RJ").
 
 ## Complete Inspection Template
 

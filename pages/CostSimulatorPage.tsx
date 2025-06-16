@@ -9,7 +9,7 @@ const CostSimulatorPage: React.FC = () => {
     destination: '',
     fuelPricePerLiter: 6,
     fuelEfficiencyKmPerLiter: 10,
-    tolls: 0,
+    tolls: undefined,
     origin: COMPANY_BASE_ADDRESS,
   });
   const [result, setResult] = useState<FuelCostResult | null>(null);
@@ -20,7 +20,12 @@ const CostSimulatorPage: React.FC = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'destination' ? value : Number(value),
+      [name]:
+        name === 'destination'
+          ? value
+          : value === ''
+          ? undefined
+          : Number(value),
     }));
   };
 
@@ -40,7 +45,7 @@ const CostSimulatorPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-semibold text-neutral-dark">Simulador de Custo de Deslocamento</h1>
+      <h1 className="text-3xl font-semibold text-neutral-dark">Simulador de Custo de Deslocamento (ida e volta)</h1>
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow space-y-4 max-w-xl">
         <div>
           <label htmlFor="destination" className="block text-sm font-medium text-neutral-dark">Endereço de Destino *</label>
@@ -79,14 +84,15 @@ const CostSimulatorPage: React.FC = () => {
           />
         </div>
         <div>
-          <label htmlFor="tolls" className="block text-sm font-medium text-neutral-dark">Pedágios (R$)</label>
+          <label htmlFor="tolls" className="block text-sm font-medium text-neutral-dark">Pedágios (R$) opcional</label>
           <input
             id="tolls"
             name="tolls"
             type="number"
             step="0.01"
-            value={formData.tolls}
+            value={formData.tolls ?? ''}
             onChange={handleChange}
+            placeholder="Deixe em branco para cálculo automático"
             className="mt-1 block w-full px-3 py-2 border border-neutral rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
           />
         </div>
